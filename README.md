@@ -25,9 +25,9 @@ cargo build --release --bin studio
 | Assembler | `studio-asm` | Parser + encoder, label resolution, diagnostic errors |
 | CPU | `studio-cpu` | Cycle-emulated 8086 core, flags, interrupts, no global state |
 | BIOS | `studio-bios` | Emulated INT 10h/21h/24h routines, dispatch |
-| FMT | `studio-fmt` | `.com`/`.exe`/`.bin`/`.binf` writers, disassembly helpers |
-| Debug | `studio-debug` | Breakpoints, watchpoints, state snapshots |
-| GUI | `studio-gui` | Desktop editor, code panel, registers, memory view, console |
+| FMT | `studio-fmt` | `.com`/`.exe`/`.bin`/`.binf` writers |
+| Debug | `studio-debug` | Breakpoints, source map, **8086 stand‑alone disassembler** |
+| GUI | `studio-gui` | Desktop editor, code panel, disassembler view, registers, memory, console |
 
 ## Examples
 

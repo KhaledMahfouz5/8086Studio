@@ -37,6 +37,11 @@ pub struct App {
     pub viewer: Option<(Reg16, u16)>,
     pub breakpoints: studio_debug::Breakpoints,
     pub output: Vec<String>,
+    /// Whether the stand‑alone Disassembler view is visible.
+    pub disassembler_open: bool,
+    /// Cached disassembly of the last assembled program. Rebuilt on Assemble
+    /// and on `clear_cache` actions.
+    pub disasm_list: Option<studio_debug::disassembler::DisasmList>,
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
@@ -64,6 +69,8 @@ impl App {
             viewer: None,
             breakpoints: studio_debug::Breakpoints::default(),
             output: Vec::new(),
+            disassembler_open: false,
+            disasm_list: None,
         }
     }
 
@@ -76,6 +83,7 @@ impl App {
         self.run_state = RunState::Idle;
         self.output.clear();
         self.current_line = None;
+        self.disasm_list = None;
         self.status = "new — .com template loaded".into();
     }
 
@@ -88,6 +96,7 @@ impl App {
             self.last_asm = None;
             self.last_error = None;
             self.run_state = RunState::Idle;
+            self.disasm_list = None;
             self.status = format!("Loaded {name}.");
         } else {
             self.status = format!("Unknown example {name}.");
@@ -105,6 +114,7 @@ impl App {
                 self.last_asm = None;
                 self.last_error = None;
                 self.run_state = RunState::Idle;
+                self.disasm_list = None;
                 self.status = format!("opened {label}");
             }
             Err(e) => self.status = format!("open failed: {e}"),
@@ -158,9 +168,15 @@ impl App {
                 self.run_state = RunState::Idle;
                 self.output.clear();
                 self.current_line = r.lines.first().map(|l| l.line);
+                // Build the stand‑alone disassembly view.
+                self.disasm_list = Some(studio_debug::disassembler::disassemble(
+                    r.entry_ip,
+                    &r.bytes,
+                ));
             }
             Err(e) => {
                 self.last_error = Some(e.clone());
+                self.disasm_list = None;
                 self.status = format!("Line {}: {}", e.line, e.message);
             }
         }
@@ -308,6 +324,10 @@ impl eframe::App for App {
                 if crate::widgets::button::show(ui, &t, "Examples", crate::widgets::button::ButtonVariant::Ghost,    crate::widgets::button::ButtonSize::Sm).clicked() {
                     self.examples_open = !self.examples_open;
                 }
+                ui.add_space(4.0);
+                if crate::widgets::button::show(ui, &t, "Disasm", crate::widgets::button::ButtonVariant::Ghost, crate::widgets::button::ButtonSize::Sm).clicked() {
+                    self.disassembler_open = !self.disassembler_open;
+                }
                 ui.add_space(8.0);
                 ui.add_sized([180.0, 24.0],
                     egui::TextEdit::singleline(&mut self.path_input)
@@ -452,6 +472,36 @@ impl eframe::App for App {
                             }
                         });
                     ui.add_space(8.0);
+
+                    // Disassembler view (stand‑alone).
+                    if self.disassembler_open {
+                        egui::Frame::group(&egui::Style::default())
+                            .fill(t.surface)
+                            .stroke(egui::Stroke::new(1.0_f32, t.border))
+                            .rounding(egui::Rounding::same(4.0))
+                            .inner_margin(egui::Margin::same(8.0))
+                            .show(ui, |ui| {
+                                ui.label(egui::RichText::new("Disassembler").color(t.accent).strong().size(11.0));
+                                ui.add_space(2.0);
+                                if let Some(list) = &self.disasm_list {
+                                    let cpu_ip = self.cpu.as_ref().map(|c| c.ip);
+                                    let state = crate::widgets::disassembler::DisassemblerState {
+                                        list,
+                                        current_ip: cpu_ip,
+                                        focused: self.run_state == RunState::Paused,
+                                    };
+                                    egui::ScrollArea::vertical()
+                                        .max_height(220.0)
+                                        .auto_shrink([false, false])
+                                        .show(ui, |ui| {
+                                            crate::widgets::disassembler::show(ui, &t, &state);
+                                        });
+                                } else {
+                                    ui.label(egui::RichText::new("(assemble to populate)").color(t.text_muted).size(11.0));
+                                }
+                            });
+                        ui.add_space(8.0);
+                    }
 
                     // Registers + Flags (S06 + S07 partially).
                     egui::Frame::group(&egui::Style::default())

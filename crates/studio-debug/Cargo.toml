@@ -8,3 +8,4 @@ description = "Source-map ↔ address ↔ breakpoint types for the debugger."
 
 [dependencies]
 studio-asm = { workspace = true }
+studio-isa = { workspace = true }

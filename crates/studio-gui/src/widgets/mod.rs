@@ -16,3 +16,4 @@ pub mod pane_tab_strip;
 pub mod status_bar;
 pub mod code_panel;
 pub mod editor;
+pub mod disassembler;

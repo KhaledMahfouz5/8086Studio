@@ -5,7 +5,7 @@ This file tracks the features that are present in the original **emu8086** but a
 | Priority | Feature | Status |
 |---|---|---|
 | **MUST** | Syntax‑highlighted source editor (advanced coloring) | **Done** – enabled via `egui::TextEdit::code_editor()` (basic highlighting). |
-| **MUST** | Disassembler view (stand‑alone screen) | Pending – need UI pane to load arbitrary binaries and display address/hex/mnemonic. |
+| **MUST** | Disassembler view (stand‑alone screen) | **Done** – `studio_debug::disassembler` decodes any byte buffer (round‑trip with `studio_cpu::step`); new `widgets::disassembler` renders `addr | bytes | mnemonic args`; toggled from the toolbar. |
 | **MUST** | `.exe`/`.bin`/`.boot` output writers (`#make_*#` directives) | Pending – `studio_fmt::write_exe` stub to be added. |
 | **MUST** | Virtual 80×25 text‑mode screen (INT 10h output) | Pending – implement screen buffer and render in GUI. |
 | **MUST** | Full BIOS INT family (INT 21h 01/02/0A, INT 16h, INT 1Ah, etc.) | Partially done – only INT 21h 09h and 4Ch. |

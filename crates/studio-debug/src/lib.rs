@@ -2,8 +2,15 @@
 //!
 //! v0 (vertical slice): just a `SourceMap` and a `Breakpoints` set. The
 //! GUI's CodePanel + BreakpointDot widgets consume these.
+//!
+//! `disassembler` is a stand‑alone 8086 disassembler that mirrors the
+//! v1 ISA set implemented by `studio-cpu::step`. It works on any byte
+//! buffer (e.g. a `.com` image or a live memory slice) and produces a
+//! list of `addr | bytes | mnemonic args` lines.
 
 #![forbid(unsafe_code)]
+
+pub mod disassembler;
 
 use std::collections::BTreeSet;
 

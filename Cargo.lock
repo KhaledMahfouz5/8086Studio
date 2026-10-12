@@ -2245,6 +2245,7 @@ name = "studio-debug"
 version = "0.1.0"
 dependencies = [
  "studio-asm",
+ "studio-isa",
 ]
 
 [[package]]
