@@ -1,0 +1,34 @@
+[package]
+name = "studio-gui"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "8086Studio desktop GUI (egui). The only crate that knows about pixels."
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "studio"
+path = "src/bin/studio.rs"
+
+[[bin]]
+name = "studio-preview"
+path = "src/bin/preview.rs"
+
+[features]
+default = []
+preview = []
+
+[dependencies]
+studio-isa = { workspace = true }
+studio-asm = { workspace = true }
+studio-cpu = { workspace = true }
+studio-bios = { workspace = true }
+studio-fmt = { workspace = true }
+studio-debug = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+egui = "0.29"
+eframe = { version = "0.29", default-features = false, features = ["default_fonts", "wayland", "x11", "glow"] }

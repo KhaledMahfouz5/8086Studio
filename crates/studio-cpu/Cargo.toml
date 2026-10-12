@@ -1,0 +1,10 @@
+[package]
+name = "studio-cpu"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Functional 8086 emulator: registers, flags, segmented memory, step() and run_until()."
+
+[dependencies]
+studio-isa = { workspace = true }

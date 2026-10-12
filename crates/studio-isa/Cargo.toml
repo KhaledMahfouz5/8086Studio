@@ -1,0 +1,10 @@
+[package]
+name = "studio-isa"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Pure data: 8086 instruction set, registers, flags, addressing modes."
+
+[dependencies]
+bitflags = { workspace = true }

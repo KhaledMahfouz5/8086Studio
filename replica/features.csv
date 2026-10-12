@@ -1,0 +1,52 @@
+feature,area,priority,original,clone,notes
+Syntax-highlighted source editor,editor,must,yes,partial,"Read/edit pane (egui TextEdit, monospace) wired into S01. Colour-coded syntax highlight is milestone 2."
+Source templates (com/exe/bin/boot/clean),editor,must,yes,partial,com template ships as the New/default buffer; the other four headers are milestone 2.
+Block comment toggle Ctrl+Q / uncomment Ctrl+W,editor,must,yes,no,
+Find / replace with regex,editor,must,yes,no,
+Go-to-line,editor,must,yes,no,
+Bookmarks (Ctrl+F2 / F2 / Shift+F2),editor,should,yes,no,
+Split editor view,editor,could,yes,no,
+Assembler directive .org / .stack / .data / .code,assembler,must,yes,partial,ORG implemented; .stack/.data/.code deferred.
+Assembler directives #make_com# / #make_exe# / #make_bin# / #make_boot#,assembler,must,yes,no,Format auto-detect deferred; .com is the only output format wired so far.
+Assembler directives #LOAD_SEGMENT / #LOAD_OFFSET / #CS= / #IP= / etc,assembler,must,yes,no,Needed for .bin/.boot preset state; milestone 2.
+"Assembler directive #MEM=seg:off,bytes-seg:off,bytes",assembler,should,yes,no,Memory prefill for .bin/.boot; milestone 2.
+"8086 instruction set coverage (MOV, ADD, SUB, CMP, JMP, Jcc, LOOP, INT, PUSH, POP, CALL, RET, MUL, DIV, IN, OUT, string ops, flag ops)",cpu,must,yes,partial,~22 mnemonics done (the v1 list + AND/OR/XOR/Ja/Jb/Jae/Jbe/Jge/Jl/LEA/SHR/8-bit MOV). MUL/DIV/IN/OUT/string/BCD/shift-rotate are milestone 2.
+Flag updates (OF/DF/IF/TF/SF/ZF/AF/PF/CF) per instruction,cpu,must,yes,partial,ADD/SUB/CMP/INC/DEC matrices done (INC/DEC preserve CF per Intel). SHL/ROL/SAR/BCD matrices are milestone 2.
+Segment-prefix handling,cpu,must,yes,no,Memory ops assume DS (code assumes CS). Explicit segment overrides are milestone 2.
+Prefetch queue (6 bytes) with branch flush,cpu,should,yes,no,Out of scope for a functional emulator (architecture decision).
+Cycle-accurate timing per instruction,cpu,could,yes,no,Deferred by v1 choice.
+Single step (F8 equivalent),debugger,must,yes,yes,Step button advances one instruction and refreshes regs/flags/IP/line.
+Run / Stop / Reset,debugger,must,yes,yes,Run executes to halt/exit/breakpoint/cap; Stop pauses; Reset reloads the last compiled image.
+Step backward through prior states,debugger,should,yes,no,Needs cpu::snapshot/restore history; milestone 3.
+Breakpoints (toggle on code line),debugger,must,yes,yes,Click a code-panel row to set/clear; Run stops before executing a breakpointed IP.
+Registers panel (AX/BX/CX/DX/SP/BP/SI/DI + halves + segments),debugger,must,yes,partial,"8 general registers + IP shown live; 8-bit halves and segment registers are read-only displays, milestone 2 for editing."
+"Flags panel (9 active flags, individually editable)",debugger,must,yes,partial,All 9 flags shown live via FlagBit; click-to-toggle wiring to the CPU FLAGS is milestone 2.
+"Memory panel (segmented view, byte cell, edit on click)",debugger,must,yes,partial,Hex+ASCII dump shown; click-to-edit deferred to milestone 2.
+Stack panel (SS:SP),debugger,must,yes,no,SP tracked; dedicated SS:SP memory view not built yet.
+Extended Viewer (value in bin/hex/dec/signed/ASCII),debugger,must,yes,partial,Double-click a register opens the viewer with hex/dec/signed/binary. ASCII form deferred.
+Source-line ↔ address mapping (.debug file),debugger,must,yes,partial,SourceMap (line↔addr) implemented and drives the current-line highlight; on-disk .debug side-file not written yet.
+Variables / symbol window (.symbol file),debugger,should,yes,no,
+1 MiB memory model + IVT + system info area,cpu,must,yes,partial,"Full 1 MiB flat array + segmentation; IVT and system-info area are milestone 2 (INTs are dispatched by the BIOS layer, not the IVT table)."
+"BIOS interrupt stubs (INT 10h video, INT 13h disk, INT 16h keyboard, INT 19h reboot, INT 1Ah time)",emulator,must,yes,no,INT 16h used by keybrd.asm is not yet served (falls through). Milestone 2.
+DOS interrupt stubs (INT 21h),emulator,must,yes,partial,AH=09h (write $-string) and AH=4Ch (exit) done. AH=01h/02h/0Ah (char I/O) are milestone 2.
+Virtual 80x25 text-mode screen,emulator,must,yes,no,INT 21h/09h output goes to the Output console; a real text-mode screen buffer is milestone 2.
+Virtual 320x200 mode 13h graphics,emulator,should,yes,no,
+"Virtual floppy drives FLOPPY_0..3 (1,474,560 byte images)",emulator,should,yes,no,
+INT 11h / INT 12h / INT 13h BIOS hooks for floppy count,emulator,should,yes,no,
+Custom memory map via custom_memory_map.inf,emulator,could,yes,no,
+Compile errors panel with jump-to-line,assembler,must,yes,partial,Error panel shows line+message on assembly failure; double-click jump-to-line deferred to milestone 2.
+"Examples library (LED, traffic light, motor, micro-OS)",examples,should,yes,partial,10 own examples shipped and running (see examples/). Device/OS examples need virtual peripherals; milestone 2+.
+Tutorials and integrated help tree,docs,could,yes,no,
+ALU internal-operation visualization diagram,cpu,could,yes,no,
+Source-level assembler listing (.lst file with addresses + bytes),assembler,could,yes,no,
+.COM / .EXE / .BIN / .BOOT output,assembler,must,yes,partial,.COM writer done (fmt::write_com + Save .com button). .exe/.bin/.boot are milestone 2.
+Windows-only installer / COM-based editor control,distribution,skip,yes,skip,Original uses cmax20.ocx. Cross-platform Rust clone has no equivalent.
+Original emu8086 branding / trademarks / logo,branding,skip,yes,skip,The clone ships under our own name.
+Proprietary serial-key activation,distribution,skip,yes,skip,We ship a free / open-source tool.
+Bundled Windows help (.chm) verbatim,docs,skip,yes,skip,"We write our own docs and quote only short, attributed excerpts where useful."
+emu8086.inc macro compatibility (PUTC/PRINT/PRINTN/CURSORON/CURSOROFF/GOTOXY),compat,must,yes,no,"Spec captured (replica/studio-macros.md); the macro preprocessor (MACRO/ENDM, LOCAL, include) is milestone 2."
+DEFINE_SCAN_NUM / DEFINE_PRINT_STRING / DEFINE_PTHIS / DEFINE_GET_STRING / DEFINE_CLEAR_SCREEN / DEFINE_PRINT_NUM / DEFINE_PRINT_NUM_UNS,compat,should,yes,no,Needs the macro preprocessor; milestone 2.
+Bundled .asm examples (85 files: hello/calc/micro-os_loader/etc.),examples,should,yes,no,We write our own. See replica/examples-todo.md. 10 Tier-1 done.
+FASM.EXE bundled with the installer,toolchain,skip,yes,skip,"We don't redistribute a third-party assembler; users pair 8086Studio with NASM, FASM, or our own emu8086-asm."
+MicroAsm.dll / diasm.dll (the proprietary assembler + disassembler engines),engine,skip,yes,skip,Our emu8086-asm and emu8086-fmt are written from scratch; we do not bundle or load these DLLs.
+Virtual device shells (Robot.exe / Traffic_Lights.exe / Stepper_motor.exe / VGA_STATE.exe / etc.),devices,skip,yes,skip,Original device shells are COM-out-of-process; we ship a clean-room I/O port stub layer instead (no virtual peripherals in v1).

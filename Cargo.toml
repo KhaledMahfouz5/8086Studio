@@ -1,0 +1,35 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/studio-isa",
+    "crates/studio-asm",
+    "crates/studio-cpu",
+    "crates/studio-bios",
+    "crates/studio-fmt",
+    "crates/studio-debug",
+    "crates/studio-gui",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+rust-version = "1.80"
+
+[workspace.dependencies]
+studio-isa = { path = "crates/studio-isa" }
+studio-asm = { path = "crates/studio-asm" }
+studio-cpu = { path = "crates/studio-cpu" }
+studio-bios = { path = "crates/studio-bios" }
+studio-fmt = { path = "crates/studio-fmt" }
+studio-debug = { path = "crates/studio-debug" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+bitflags = "2"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+strip = true

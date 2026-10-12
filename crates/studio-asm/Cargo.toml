@@ -1,0 +1,10 @@
+[package]
+name = "studio-asm"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "8086 Intel-syntax assembler: text → bytes + side-files."
+
+[dependencies]
+studio-isa = { workspace = true }

@@ -1,0 +1,47 @@
+/* replica/design/tokens.css
+ * Reference CSS variables that mirror tokens.json. egui does not consume CSS;
+ * these are here so a future web build or design-doc preview can reuse the
+ * same roles and values without re-deriving them.
+ */
+
+:root {
+  --bg: #1a1d23;
+  --surface: #22262e;
+  --surface-raised: #2a2f38;
+  --border: #6b7480;
+  --border-input: #868e98;
+  --text: #e6e9ee;
+  --text-muted: #9aa3b1;
+  --accent: #7aa2f7;
+  --on-accent: #0e1116;
+  --danger: #f7768e;
+  --success: #9ece6a;
+  --warning: #e0af68;
+
+  --syntax-keyword: #7aa2f7;
+  --syntax-directive: #bb9af7;
+  --syntax-comment: #9aa3b1;
+  --syntax-string: #9ece6a;
+  --syntax-label: #e0af68;
+  --syntax-number: #ff9e64;
+
+  --memory-bg: #0e1116;
+  --memory-fg: #9ece6a;
+  --memory-cursor: #7aa2f7;
+  --code-current-line: #2a2f38;
+  --breakpoint-dot: #f7768e;
+  --breakpoint-hit: #e0af68;
+  --flag-set: #9ece6a;
+  --flag-clear: #868e98;
+
+  --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  --motion-fast: 80ms;
+  --motion-base: 140ms;
+  --motion-slow: 240ms;
+}
